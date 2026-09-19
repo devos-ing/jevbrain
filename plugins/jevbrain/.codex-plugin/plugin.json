@@ -1,0 +1,24 @@
+{
+  "name": "jevbrain",
+  "version": "0.1.0",
+  "description": "Select an eligible registered sub-agent profile with Jevbrain.",
+  "author": {
+    "name": "Jevbrain contributors"
+  },
+  "license": "MIT",
+  "keywords": ["jev", "routing", "mcp", "sub-agents"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Jevbrain",
+    "shortDescription": "Route approved delegations to registered profiles.",
+    "longDescription": "Jevbrain filters a trusted profile registry and asks Jev to select an eligible profile after the main session decides to delegate. The host still owns execution, permissions, and verification.",
+    "developerName": "Jevbrain contributors",
+    "category": "Productivity",
+    "capabilities": ["MCP server", "Local routing"],
+    "defaultPrompt": [
+      "Route this approved delegation with Jevbrain.",
+      "Explain the eligible profile selection for this task."
+    ]
+  },
+  "mcpServers": "./.mcp.json"
+}

@@ -5,15 +5,31 @@ export const illustrativeReplay: ReplayData = ReplayDataSchema.parse({
   label: "ILLUSTRATIVE OFFLINE REPLAY",
   task: {
     title: "Make the settings UI responsive",
-    briefing: "Make settings responsive while preserving keyboard access and the existing data flow.",
-    requiredCapability: "responsive-ui",
+    briefing:
+      "Make settings responsive while preserving keyboard access and the existing data flow.",
+    requiredCapability: "frontend",
   },
   profiles: [
-    { profileId: "general-medium", role: "General implementation", eligible: true },
-    { profileId: "ui-medium", role: "Responsive UI implementation", eligible: true },
-    { profileId: "review-low", role: "Read-only review", eligible: false },
+    {
+      profileId: "general-medium",
+      role: "General implementation",
+      effort: "medium",
+      eligible: true,
+    },
+    {
+      profileId: "frontend-medium",
+      role: "Frontend implementation",
+      effort: "medium",
+      eligible: true,
+    },
+    {
+      profileId: "frontend-high",
+      role: "Complex frontend implementation",
+      effort: "high",
+      eligible: true,
+    },
   ],
-  selection: { status: "selected", profileId: "ui-medium" },
+  selection: { status: "selected", profileId: "frontend-medium" },
   simulatedResult: {
     status: "returned",
     summary: "Host verifies and integrates the result.",

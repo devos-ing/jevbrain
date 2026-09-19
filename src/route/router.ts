@@ -7,6 +7,8 @@ import {
 } from "./advisor.ts";
 import {
   AdvisorObservationSchema,
+  type RoutingOptionsResult,
+  RoutingOptionsResultSchema,
   type RoutingPolicy,
   RoutingPolicySchema,
   type RoutingProfile,
@@ -25,7 +27,11 @@ export type RouterStartup = {
   advisor?: RouteAdvisor;
 };
 
-export function createTaskRouter(startup: RouterStartup) {
+export type TaskRouter = ((rawInput: unknown, signal: AbortSignal) => Promise<TaskRouteResult>) & {
+  listOptions(): RoutingOptionsResult;
+};
+
+export function createTaskRouter(startup: RouterStartup): TaskRouter {
   const registry = RoutingRegistrySchema.parse(startup.registry);
   const policy = RoutingPolicySchema.parse(startup.policy);
   const registryIds = new Set(registry.profiles.map(({ profileId }) => profileId));
@@ -34,7 +40,7 @@ export function createTaskRouter(startup: RouterStartup) {
   }
   const snapshot = { registry, policy };
 
-  return async (rawInput: unknown, signal: AbortSignal): Promise<TaskRouteResult> => {
+  const route = async (rawInput: unknown, signal: AbortSignal): Promise<TaskRouteResult> => {
     const startedAt = performance.now();
     const input = TaskRouteInputSchema.parse(rawInput);
     const binding = bindingFor(input, snapshot.registry, snapshot.policy);
@@ -173,6 +179,7 @@ export function createTaskRouter(startup: RouterStartup) {
           profileVersion: selected.profileVersion,
           runtime: selected.runtime,
           model: selected.model,
+          ...(selected.effort === undefined ? {} : { effort: selected.effort }),
         },
         confidence: answer.confidence,
         metadata: metadata(attempts, startup.advisor.transportMode, provider),
@@ -204,6 +211,42 @@ export function createTaskRouter(startup: RouterStartup) {
       });
     }
   };
+  return Object.assign(route, {
+    listOptions() {
+      const allowed = new Set(policy.allowedProfileIds);
+      return RoutingOptionsResultSchema.parse({
+        schemaVersion: "routing-options-v1",
+        registryVersion: registry.registryVersion,
+        policyVersion: policy.policyVersion,
+        profiles: registry.profiles
+          .filter(
+            ({ profileId, enabled, declaredAvailable }) =>
+              allowed.has(profileId) && enabled && declaredAvailable,
+          )
+          .map(
+            ({
+              profileId,
+              profileVersion,
+              role,
+              description,
+              runtime,
+              model,
+              effort,
+              capabilities,
+            }) => ({
+              profileId,
+              profileVersion,
+              role,
+              description,
+              runtime,
+              model,
+              ...(effort === undefined ? {} : { effort }),
+              capabilities,
+            }),
+          ),
+      });
+    },
+  });
 }
 
 function bindingFor(input: TaskRouteInput, registry: RoutingRegistry, policy: RoutingPolicy) {

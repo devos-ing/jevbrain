@@ -8,5 +8,5 @@
     "constraints": ["Do not include raw source catalogs or unrelated conversation text."],
     "decisions": []
   },
-  "requiredCapabilities": ["replace-with-real-capability"]
+  "requiredCapabilities": ["implementation", "typescript"]
 }

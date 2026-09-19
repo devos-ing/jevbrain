@@ -1,7 +1,12 @@
 import { z } from "zod";
 
 const ProfileSchema = z
-  .object({ profileId: z.string().min(1), role: z.string().min(1), eligible: z.boolean() })
+  .object({
+    profileId: z.string().min(1),
+    role: z.string().min(1),
+    effort: z.enum(["low", "medium", "high", "xhigh"]),
+    eligible: z.boolean(),
+  })
   .strict();
 
 export const ReplayDataSchema = z

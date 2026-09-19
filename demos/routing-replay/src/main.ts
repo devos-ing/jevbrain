@@ -33,7 +33,7 @@ app.innerHTML = `<main class="page">
       <div class="candidate-block" data-stage="5">${eligibleProfiles
         .map(
           (profile) =>
-            `<div class="candidate" data-id="${profile.profileId}"><span>${profile.profileId}</span><small>${profile.role}</small>${profile.profileId === data.selection.profileId ? "<b>SELECTED</b>" : ""}</div>`,
+            `<div class="candidate" data-id="${profile.profileId}"><span>${profile.profileId}</span><small>${profile.effort} · ${profile.role}</small>${profile.profileId === data.selection.profileId ? "<b>SELECTED</b>" : ""}</div>`,
         )
         .join("")}</div>
       <div class="line annotation" data-stage="5">↳ eligibility comes from host policy and registered capabilities</div>

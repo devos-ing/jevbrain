@@ -104,6 +104,7 @@ export function createJevAdvisor(options: {
             description: profile.description,
             runtime: profile.runtime,
             model: profile.model,
+            effort: profile.effort ?? "unspecified",
             capabilities: profile.capabilities,
           },
         ]),

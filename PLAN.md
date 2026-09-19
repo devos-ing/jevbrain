@@ -10,7 +10,7 @@ Jevbrain is releasing the routing core first. The main session decides to delega
 | --- | --- | --- |
 | Response contracts | Complete | Zod contracts correlate a route result with the original delegation and reject malformed or unknown profiles. |
 | Context split | Complete | Host-supplied sources are filtered through a trusted policy into a verbatim manifest and declarative grant. |
-| Profile routing | Complete | Eligibility checks, a default-off Jev adapter, cancellation, bounded requests, CLI access, and one MCP tool named `task_route`. |
+| Profile routing | Complete | Eligibility checks, a default-off Jev adapter, cancellation, bounded requests, CLI access, `task_route`, and the read-only `task_route_options` catalog tool. |
 | Offline evaluation | Complete | Versioned replay and comparison commands exercise the production routing core without worker or provider execution. |
 | Bounded routing checks | Complete | Synthetic live checks exercised the Jev transport and a fixed routing-label suite. Their limits remain explicit. |
 

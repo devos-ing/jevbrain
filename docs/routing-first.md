@@ -18,7 +18,7 @@ The released router stops at the validated selection. It does not intercept nati
 
 ## Registered profiles
 
-Jev selects a `profileId`, not an arbitrary command. A trusted registry defines each profile's runtime, model metadata, capabilities, availability, version, and data-sharing properties. The host maps the returned ID to an execution method that it already controls.
+Jev selects a `profileId`, not an arbitrary command. A trusted registry defines each profile's runtime, model metadata, optional reasoning effort, capabilities, availability, version, and data-sharing properties. The host maps the returned ID and effort to an execution method that it already controls. Provider output cannot invent or override the effort.
 
 A request may narrow the registry with candidate profile IDs. It cannot create a profile or broaden its tools, filesystem access, network access, model, or permissions. The router rejects unknown candidate IDs before contacting Jev.
 
@@ -33,6 +33,12 @@ A request may narrow the registry with candidate profile IDs. It cannot create a
 - an optional subset of candidate profile IDs.
 
 The routing brief contains only the information needed to choose a profile. It is separate from the full worker context. See [Context handoff](context-handoff.md) for source manifests and grants.
+
+## Discover available profiles
+
+The read-only MCP tool `task_route_options` accepts an empty object. It does not call Jev or route a task. It returns a `routing-options-v1` object with the trusted registry and policy versions and an array of profile metadata: `profileId`, version, role, description, runtime, model, optional effort, and capabilities.
+
+The list contains profiles that startup policy allows and the trusted registry marks enabled and available. It is not a task-specific eligibility result. Capability matching and an optional request candidate subset still apply only when the host calls `task_route`.
 
 ## Eligibility before advice
 

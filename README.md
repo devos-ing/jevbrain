@@ -28,9 +28,22 @@ bun bin/jevbrain.mjs server \
   --policy examples/routing-policy.json
 ```
 
-The checked-in registry is disabled and its placeholder profile is unavailable. Replace the profile IDs, runtime metadata, capabilities, and availability with values that your host controls. Provider access and egress remain off until the trusted policy enables them. Keep credentials in the server environment, never in the registry, policy, or MCP config.
+The checked-in registry is a nine-profile template covering general, frontend, backend, debugging, review, and documentation work at fixed medium or high effort. Every profile is marked unavailable until the host confirms that its runtime exists. Replace or adapt the profile metadata and availability with values that your host controls. Provider access and egress remain off until the trusted policy enables them. Keep credentials in the server environment, never in the registry, policy, or MCP config.
+
+`task_route_options` lists profiles that policy allows and the host marks enabled and available. It makes no provider call and returns profile metadata, including optional effort. Required-capability matching still happens in `task_route` for the specific delegation.
 
 Use the [Codex MCP example](examples/codex-mcp.toml) or [Claude Code MCP example](examples/claude-code-mcp.json) as a starting point. Both contain path placeholders and do not activate either host by themselves.
+
+## Install the Codex plugin
+
+From this source checkout, stage the self-contained local plugin and install it from the personal marketplace:
+
+```bash
+bun run plugin:stage
+codex plugin add jevbrain@personal
+```
+
+The staged plugin keeps provider access off and lists no available routing options until you supply host-owned configuration. Read [Install the Jevbrain Codex plugin](docs/codex-plugin.md) for paths, updates, isolated validation, and the local-stdio distribution limit.
 
 ## Replay the router offline
 

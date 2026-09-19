@@ -12,6 +12,7 @@ demos/*
 !demos/routing-replay/
 demos/routing-replay/dist/
 demos/routing-replay/node_modules/
+plugins/jevbrain/dist/
 src/study/
 test/study*.test.ts
 bench/site-build-v1/

@@ -13,7 +13,7 @@ const PackageVerificationResultSchema = z
     replayChecks: z.number().int().positive(),
     evalCases: z.literal(12),
     evalComparison: z.literal(true),
-    mcpTools: z.tuple([z.literal("task_route")]),
+    mcpTools: z.tuple([z.literal("task_route"), z.literal("task_route_options")]),
     mcpOutcome: z.literal("provider_disabled"),
   })
   .strict();
@@ -219,7 +219,11 @@ try {
   await client.connect(transport);
   const tools = await client.listTools();
   const toolNames = tools.tools.map(({ name }) => name);
-  if (toolNames.length !== 1 || toolNames[0] !== "task_route") {
+  if (
+    toolNames.length !== 2 ||
+    toolNames[0] !== "task_route" ||
+    toolNames[1] !== "task_route_options"
+  ) {
     throw new Error("installed MCP server exposes an unexpected tool set");
   }
   const call = McpTextResultSchema.parse(

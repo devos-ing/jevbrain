@@ -1,10 +1,7 @@
 import { McpServer, type StandardSchemaWithJSON } from "@modelcontextprotocol/server";
+import { z } from "zod";
 import { RoutingErrorSchema, type TaskRouteInput, TaskRouteInputSchema } from "./contracts.ts";
-
-export type TaskRouter = (
-  input: unknown,
-  signal: AbortSignal,
-) => Promise<ReturnType<typeof import("./contracts.ts").TaskRouteResultSchema.parse>>;
+import type { TaskRouter } from "./router.ts";
 
 const SafeTaskRouteInputSchema: StandardSchemaWithJSON<unknown, TaskRouteInput> = {
   "~standard": {
@@ -23,7 +20,7 @@ export function createRoutingMcpServer(router: TaskRouter): McpServer {
     {
       capabilities: { tools: {} },
       instructions:
-        "The main session has already decided to delegate. task_route selects an eligible registered sub-agent profile. The host separately launches that profile; this server never executes workers.",
+        "The main session has already decided to delegate. task_route_options lists currently available trusted profiles without provider access. task_route selects an eligible registered sub-agent profile. The host separately launches that profile; this server never executes workers.",
     },
   );
   server.registerTool(
@@ -45,6 +42,19 @@ export function createRoutingMcpServer(router: TaskRouter): McpServer {
           content: [{ type: "text", text: JSON.stringify(error) }],
         };
       }
+    },
+  );
+  server.registerTool(
+    "task_route_options",
+    {
+      title: "List available registered sub-agent profiles",
+      description:
+        "List trusted profiles that are enabled, declared available, and allowed by startup policy. This does not call a provider, route a task, or launch a worker.",
+      inputSchema: z.object({}).strict(),
+    },
+    async () => {
+      const result = router.listOptions();
+      return { content: [{ type: "text", text: JSON.stringify(result) }] };
     },
   );
   return server;

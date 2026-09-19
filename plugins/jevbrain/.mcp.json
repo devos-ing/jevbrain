@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "jevbrain": {
+      "command": "bun",
+      "args": ["./dist/server.js"],
+      "cwd": ".",
+      "env_vars": ["JEVBRAIN_REGISTRY", "JEVBRAIN_POLICY", "TYPESAFE_API_KEY"],
+      "startup_timeout_sec": 1800,
+      "tool_timeout_sec": 1800
+    }
+  }
+}

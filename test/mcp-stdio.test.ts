@@ -6,7 +6,7 @@ import { Client } from "@modelcontextprotocol/client";
 import { StdioClientTransport } from "@modelcontextprotocol/client/stdio";
 import { InMemoryTransport } from "@modelcontextprotocol/server";
 import { z } from "zod";
-import { TaskRouteResultSchema } from "../src/route/contracts.ts";
+import { RoutingOptionsResultSchema, TaskRouteResultSchema } from "../src/route/contracts.ts";
 import { createRoutingMcpServer } from "../src/route/mcp-server.ts";
 
 const TextResultSchema = z
@@ -15,7 +15,24 @@ const TextResultSchema = z
   })
   .passthrough();
 
-test("official MCP client lists and calls the sole STDIO tool", async () => {
+const testRouter = (
+  handler: Parameters<typeof createRoutingMcpServer>[0] extends infer Router
+    ? Router extends (...args: infer Args) => infer Result
+      ? (...args: Args) => Result
+      : never
+    : never,
+): Parameters<typeof createRoutingMcpServer>[0] =>
+  Object.assign(handler, {
+    listOptions: () =>
+      RoutingOptionsResultSchema.parse({
+        schemaVersion: "routing-options-v1",
+        registryVersion: "1.0.0",
+        policyVersion: "1.0.0",
+        profiles: [],
+      }),
+  });
+
+test("official MCP client lists routing and read-only options tools", async () => {
   const directory = await mkdtemp(join(tmpdir(), "jevbrain-mcp-test-"));
   const registryFile = join(directory, "registry.json");
   const policyFile = join(directory, "policy.json");
@@ -67,7 +84,7 @@ test("official MCP client lists and calls the sole STDIO tool", async () => {
   try {
     await client.connect(transport);
     const listed = await client.listTools();
-    expect(listed.tools.map(({ name }) => name)).toEqual(["task_route"]);
+    expect(listed.tools.map(({ name }) => name)).toEqual(["task_route", "task_route_options"]);
     const advertisedSchema = z
       .object({
         type: z.literal("object"),
@@ -78,6 +95,22 @@ test("official MCP client lists and calls the sole STDIO tool", async () => {
       .parse(listed.tools[0]?.inputSchema);
     expect(advertisedSchema.required).toContain("delegationId");
     expect(advertisedSchema.properties).toHaveProperty("briefing");
+    const optionsResult = await client.callTool({
+      name: "task_route_options",
+      arguments: {},
+    });
+    const optionsText = TextResultSchema.parse(optionsResult).content[0]?.text;
+    expect(RoutingOptionsResultSchema.parse(JSON.parse(optionsText ?? "")).profiles).toEqual([
+      {
+        profileId: "coder",
+        profileVersion: "1.0.0",
+        role: "Synthetic coder",
+        description: "A synthetic test-only profile.",
+        runtime: "codex-cli",
+        model: "gpt-test",
+        capabilities: ["typescript"],
+      },
+    ]);
     const invalid = await client.callTool({
       name: "task_route",
       arguments: {
@@ -118,9 +151,11 @@ test("official MCP client lists and calls the sole STDIO tool", async () => {
 
 test("MCP handler failures return a fixed non-leaking tool error", async () => {
   const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
-  const server = createRoutingMcpServer(async () => {
-    throw new Error("PRIVATE_HANDLER_CANARY");
-  });
+  const server = createRoutingMcpServer(
+    testRouter(async () => {
+      throw new Error("PRIVATE_HANDLER_CANARY");
+    }),
+  );
   const client = new Client({ name: "jevbrain-error-client", version: "1.0.0" });
   try {
     await server.connect(serverTransport);
@@ -154,34 +189,36 @@ test("official client cancellation reaches the active tool and suppresses a norm
   let handlerCancelled = false;
   const handlerStarted = Promise.withResolvers<void>();
   const server = createRoutingMcpServer(
-    async (_input, signal) =>
-      new Promise((resolve) => {
-        handlerStarted.resolve();
-        signal.addEventListener(
-          "abort",
-          () => {
-            handlerCancelled = true;
-            resolve(
-              TaskRouteResultSchema.parse({
-                schemaVersion: "routing-v1",
-                status: "cancelled",
-                reason: "caller_cancelled",
-                binding: {
-                  delegationId: "delegation-1",
-                  taskId: "task-1",
-                  inputDigest: `sha256:${"0".repeat(64)}`,
-                  registryVersion: "1.0.0",
-                  registryDigest: `sha256:${"0".repeat(64)}`,
-                  policyVersion: "1.0.0",
-                  policyDigest: `sha256:${"0".repeat(64)}`,
-                },
-                metadata: { attempts: 0, elapsedMs: 0, transportMode: "disabled" },
-              }),
-            );
-          },
-          { once: true },
-        );
-      }),
+    testRouter(
+      async (_input, signal) =>
+        new Promise((resolve) => {
+          handlerStarted.resolve();
+          signal.addEventListener(
+            "abort",
+            () => {
+              handlerCancelled = true;
+              resolve(
+                TaskRouteResultSchema.parse({
+                  schemaVersion: "routing-v1",
+                  status: "cancelled",
+                  reason: "caller_cancelled",
+                  binding: {
+                    delegationId: "delegation-1",
+                    taskId: "task-1",
+                    inputDigest: `sha256:${"0".repeat(64)}`,
+                    registryVersion: "1.0.0",
+                    registryDigest: `sha256:${"0".repeat(64)}`,
+                    policyVersion: "1.0.0",
+                    policyDigest: `sha256:${"0".repeat(64)}`,
+                  },
+                  metadata: { attempts: 0, elapsedMs: 0, transportMode: "disabled" },
+                }),
+              );
+            },
+            { once: true },
+          );
+        }),
+    ),
   );
   const client = new Client({ name: "jevbrain-cancel-client", version: "1.0.0" });
   try {

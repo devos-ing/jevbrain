@@ -14,6 +14,7 @@ const registry = {
       description: "Implements bounded TypeScript changes.",
       runtime: "codex-cli",
       model: "gpt-test",
+      effort: "high",
       capabilities: ["typescript", "tests"],
       enabled: true,
       declaredAvailable: true,
@@ -25,6 +26,7 @@ const registry = {
       description: "Synthetic disabled profile.",
       runtime: "claude-code",
       model: "claude-test",
+      effort: "low",
       capabilities: ["typescript"],
       enabled: false,
       declaredAvailable: true,
@@ -130,7 +132,15 @@ describe("task routing", () => {
   test("uses official SDK serialization for one selected or abstained choice", async () => {
     const BodySchema = z.object({
       model: z.literal(JEV_MODEL),
-      questions: z.object({ route: z.object({ type: z.literal("choice") }) }),
+      questions: z.object({
+        route: z.object({
+          type: z.literal("choice"),
+          criteria: z.record(
+            z.string(),
+            z.union([z.string(), z.object({ effort: z.string() }).passthrough()]),
+          ),
+        }),
+      }),
     });
     let observedBody: unknown;
     let calls = 0;
@@ -149,9 +159,34 @@ describe("task routing", () => {
     const router = createTaskRouter({ registry, policy, apiKey: "synthetic-test-key", advisor });
     const selected = await router(request, new AbortController().signal);
     expect(selected.status).toBe("selected");
+    if (selected.status !== "selected") throw new Error("expected selected route");
+    expect(selected.profile.effort).toBe("high");
     expect(selected.metadata.attempts).toBe(1);
     expect(calls).toBe(1);
-    expect(BodySchema.parse(observedBody).model).toBe(JEV_MODEL);
+    const body = BodySchema.parse(observedBody);
+    expect(body.model).toBe(JEV_MODEL);
+    expect(body.questions.route.criteria.option_1).toMatchObject({ effort: "high" });
+  });
+
+  test("lists only trusted profiles that are currently available without capability inference", () => {
+    const router = createTaskRouter({ registry, policy });
+    expect(router.listOptions()).toEqual({
+      schemaVersion: "routing-options-v1",
+      registryVersion: "1.0.0",
+      policyVersion: "1.0.0",
+      profiles: [
+        {
+          profileId: "coder",
+          profileVersion: "1.0.0",
+          role: "Implementation engineer",
+          description: "Implements bounded TypeScript changes.",
+          runtime: "codex-cli",
+          model: "gpt-test",
+          effort: "high",
+          capabilities: ["typescript", "tests"],
+        },
+      ],
+    });
   });
 
   test("rejects malformed choice shapes and low confidence", async () => {

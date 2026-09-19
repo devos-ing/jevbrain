@@ -27,6 +27,7 @@
     "docs/routing-first.md",
     "docs/context-handoff.md",
     "docs/benchmark.md",
+    "docs/codex-plugin.md",
     "docs/m2-live-verification.md",
     "docs/m5-evaluation.md",
     "docs/m5-live-verification.md",
@@ -43,9 +44,12 @@
   "scripts": {
     "bench": "bun run src/cli.ts bench",
     "check": "bun run typecheck && bun run lint && bun run test",
-    "format": "biome format --write src/benchmark src/context src/eval src/route src/routing src/cli.ts src/contracts.ts src/mcp-stdio.ts src/verify-package.ts test/benchmark.test.ts test/context-benchmark.test.ts test/context-split.test.ts test/eval.test.ts test/route.test.ts test/routing-benchmark.test.ts test/routing-validator.test.ts test/mcp-stdio.test.ts test/cli.integration.test.ts",
-    "lint": "biome check src/benchmark src/context src/eval src/route src/routing src/cli.ts src/contracts.ts src/mcp-stdio.ts src/verify-package.ts test/benchmark.test.ts test/context-benchmark.test.ts test/context-split.test.ts test/eval.test.ts test/route.test.ts test/routing-benchmark.test.ts test/routing-validator.test.ts test/mcp-stdio.test.ts test/cli.integration.test.ts",
-    "test": "bun test --timeout 1800000 test/benchmark.test.ts test/context-benchmark.test.ts test/context-split.test.ts test/eval.test.ts test/route.test.ts test/routing-benchmark.test.ts test/routing-validator.test.ts test/mcp-stdio.test.ts test/cli.integration.test.ts",
+    "format": "biome format --write src/benchmark src/context src/eval src/plugin src/route src/routing scripts/plugin-build.ts scripts/plugin-stage.ts src/cli.ts src/contracts.ts src/mcp-stdio.ts src/verify-package.ts test/benchmark.test.ts test/context-benchmark.test.ts test/context-split.test.ts test/eval.test.ts test/plugin-install.test.ts test/route.test.ts test/routing-benchmark.test.ts test/routing-validator.test.ts test/mcp-stdio.test.ts test/cli.integration.test.ts",
+    "lint": "biome check src/benchmark src/context src/eval src/plugin src/route src/routing scripts/plugin-build.ts scripts/plugin-stage.ts src/cli.ts src/contracts.ts src/mcp-stdio.ts src/verify-package.ts test/benchmark.test.ts test/context-benchmark.test.ts test/context-split.test.ts test/eval.test.ts test/plugin-install.test.ts test/route.test.ts test/routing-benchmark.test.ts test/routing-validator.test.ts test/mcp-stdio.test.ts test/cli.integration.test.ts",
+    "plugin:build": "bun run scripts/plugin-build.ts",
+    "plugin:stage": "bun run scripts/plugin-stage.ts",
+    "plugin:test": "bun test --timeout 1800000 test/plugin-install.test.ts",
+    "test": "bun test --timeout 1800000 test/benchmark.test.ts test/context-benchmark.test.ts test/context-split.test.ts test/eval.test.ts test/plugin-install.test.ts test/route.test.ts test/routing-benchmark.test.ts test/routing-validator.test.ts test/mcp-stdio.test.ts test/cli.integration.test.ts",
     "typecheck": "tsc --noEmit",
     "verify:package": "bun run src/verify-package.ts"
   },

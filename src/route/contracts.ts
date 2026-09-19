@@ -36,6 +36,8 @@ export const TaskRouteInputSchema = z
   });
 export type TaskRouteInput = z.infer<typeof TaskRouteInputSchema>;
 
+export const RoutingEffortSchema = z.enum(["low", "medium", "high", "xhigh"]);
+
 export const RoutingProfileSchema = z
   .object({
     profileId: IdSchema,
@@ -44,6 +46,7 @@ export const RoutingProfileSchema = z
     description: z.string().min(1).max(600),
     runtime: z.enum(["codex-cli", "claude-code"]),
     model: z.string().min(1).max(160),
+    effort: RoutingEffortSchema.optional(),
     capabilities: z.array(IdSchema).max(64),
     enabled: z.boolean(),
     declaredAvailable: z.boolean(),
@@ -130,6 +133,7 @@ const SelectedProfileSchema = z
     profileVersion: VersionSchema,
     runtime: z.enum(["codex-cli", "claude-code"]),
     model: z.string().min(1).max(160),
+    effort: RoutingEffortSchema.optional(),
   })
   .strict();
 
@@ -182,6 +186,28 @@ export const TaskRouteResultSchema = z.discriminatedUnion("status", [
     .strict(),
 ]);
 export type TaskRouteResult = z.infer<typeof TaskRouteResultSchema>;
+
+export const RoutingOptionSchema = z
+  .object({
+    profileId: IdSchema,
+    profileVersion: VersionSchema,
+    role: z.string().min(1).max(160),
+    description: z.string().min(1).max(600),
+    runtime: z.enum(["codex-cli", "claude-code"]),
+    model: z.string().min(1).max(160),
+    effort: RoutingEffortSchema.optional(),
+    capabilities: z.array(IdSchema).max(64),
+  })
+  .strict();
+export const RoutingOptionsResultSchema = z
+  .object({
+    schemaVersion: z.literal("routing-options-v1"),
+    registryVersion: VersionSchema,
+    policyVersion: VersionSchema,
+    profiles: z.array(RoutingOptionSchema),
+  })
+  .strict();
+export type RoutingOptionsResult = z.infer<typeof RoutingOptionsResultSchema>;
 
 export const RoutingErrorSchema = z
   .object({
