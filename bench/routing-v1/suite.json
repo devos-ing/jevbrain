@@ -1,0 +1,58 @@
+{
+  "suiteId": "routing-synthetic",
+  "suiteVersion": "1.0.0",
+  "verifierVersion": "1.0.0",
+  "cases": [
+    {
+      "caseId": "select-coder",
+      "caseVersion": "1.0.0",
+      "fixtureFile": "select-coder.json",
+      "expected": {
+        "status": "selected",
+        "profile": {
+          "profileId": "coder",
+          "profileVersion": "1.0.0",
+          "runtime": "codex-cli",
+          "model": "gpt-test"
+        },
+        "attempts": 1,
+        "transportMode": "replay",
+        "provider": { "model": "jev-1.13.0", "usage": { "inputTokens": 20, "outputTokens": 4 } }
+      }
+    },
+    {
+      "caseId": "advisor-abstains",
+      "caseVersion": "1.0.0",
+      "fixtureFile": "advisor-abstains.json",
+      "expected": {
+        "status": "abstained",
+        "reason": "advisor_abstained",
+        "attempts": 1,
+        "transportMode": "replay",
+        "provider": { "model": "jev-1.13.0", "usage": { "inputTokens": 15, "outputTokens": 3 } }
+      }
+    },
+    {
+      "caseId": "provider-malformed",
+      "caseVersion": "1.0.0",
+      "fixtureFile": "provider-malformed.json",
+      "expected": {
+        "status": "abstained",
+        "reason": "invalid_provider_response",
+        "attempts": 1,
+        "transportMode": "replay"
+      }
+    },
+    {
+      "caseId": "provider-disabled",
+      "caseVersion": "1.0.0",
+      "fixtureFile": "provider-disabled.json",
+      "expected": {
+        "status": "abstained",
+        "reason": "provider_disabled",
+        "attempts": 0,
+        "transportMode": "disabled"
+      }
+    }
+  ]
+}

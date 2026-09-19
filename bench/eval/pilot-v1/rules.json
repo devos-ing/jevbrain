@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "routing-eval-config-v1",
+  "configId": "pilot12-rules",
+  "configVersion": "1.0.0",
+  "variant": "rules:first-eligible-v1",
+  "mode": "replay",
+  "model": "jev-1.13.0",
+  "promptVersion": "production-v1",
+  "policy": {
+    "policyVersion": "1.0.0",
+    "allowedProfileIds": [
+      "codex-implementation",
+      "claude-implementation",
+      "codex-investigation",
+      "claude-investigation",
+      "codex-review",
+      "claude-review"
+    ],
+    "providerEnabled": true,
+    "egressEnabled": true,
+    "confidenceThreshold": 0,
+    "deadlineMs": 5000,
+    "maxRequestBytes": 16384,
+    "maxResponseBytes": 65536
+  },
+  "maxCases": 12,
+  "repeats": 1,
+  "maxRequests": 12,
+  "totalDeadlineMs": 90000
+}

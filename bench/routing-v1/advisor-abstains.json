@@ -1,0 +1,57 @@
+{
+  "fixtureId": "advisor-abstains",
+  "fixtureVersion": "1.0.0",
+  "request": {
+    "delegationId": "delegation-2",
+    "taskId": "task-2",
+    "contextStatus": "ready",
+    "briefing": {
+      "objective": "Perform an ambiguous task.",
+      "acceptanceCriteria": ["Abstain safely."],
+      "constraints": [],
+      "decisions": []
+    },
+    "requiredCapabilities": ["typescript"]
+  },
+  "registry": {
+    "registryVersion": "1.0.0",
+    "profiles": [
+      {
+        "profileId": "coder",
+        "profileVersion": "1.0.0",
+        "role": "Implementation engineer",
+        "description": "Implements bounded TypeScript changes.",
+        "runtime": "codex-cli",
+        "model": "gpt-test",
+        "capabilities": ["typescript"],
+        "enabled": true,
+        "declaredAvailable": true
+      }
+    ]
+  },
+  "policy": {
+    "policyVersion": "1.0.0",
+    "allowedProfileIds": ["coder"],
+    "providerEnabled": true,
+    "egressEnabled": true,
+    "confidenceThreshold": 0.7,
+    "deadlineMs": 500,
+    "maxRequestBytes": 16384,
+    "maxResponseBytes": 16384
+  },
+  "recordedResponse": {
+    "status": 200,
+    "body": {
+      "model": "jev-1.13.0",
+      "answers": {
+        "route": {
+          "type": "choice",
+          "choice": "option_abstain",
+          "confidence": 0.8,
+          "probabilities": { "option_1": 0.2, "option_abstain": 0.8 }
+        }
+      },
+      "usage": { "input_tokens": 15, "output_tokens": 3 }
+    }
+  }
+}

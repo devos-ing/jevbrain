@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "jevbrain": {
+      "type": "stdio",
+      "command": "/absolute/path/to/bun",
+      "args": [
+        "/absolute/path/to/jev-brain/src/mcp-stdio.ts",
+        "--registry",
+        "/absolute/path/to/jev-brain/examples/routing-registry.json",
+        "--policy",
+        "/absolute/path/to/jev-brain/examples/routing-policy.json"
+      ]
+    }
+  }
+}

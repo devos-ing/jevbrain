@@ -1,0 +1,20 @@
+{
+  "delegationId": "delegation-cli",
+  "policyVersion": "1.0.0",
+  "repositoryNamespace": "repo:cli-example",
+  "allowShared": true,
+  "allowedSourceIds": ["cli-shared-source"],
+  "mandatorySourceIds": [],
+  "catalog": [
+    {
+      "sourceId": "cli-shared-source",
+      "sourceVersion": "1.0.0",
+      "repositoryNamespace": "repo:cli-example",
+      "visibility": "shared",
+      "availability": {
+        "status": "available",
+        "text": "CLI context text.\n"
+      }
+    }
+  ]
+}

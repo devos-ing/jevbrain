@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "exactOptionalPropertyTypes": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "Preserve",
+    "moduleDetection": "force",
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2024",
+    "types": ["bun"]
+  },
+  "include": [
+    "src/benchmark/**/*.ts",
+    "src/context/**/*.ts",
+    "src/eval/**/*.ts",
+    "src/route/**/*.ts",
+    "src/routing/**/*.ts",
+    "src/cli.ts",
+    "src/contracts.ts",
+    "src/mcp-stdio.ts",
+    "src/verify-package.ts",
+    "test/benchmark.test.ts",
+    "test/context-benchmark.test.ts",
+    "test/context-split.test.ts",
+    "test/eval.test.ts",
+    "test/route.test.ts",
+    "test/routing-benchmark.test.ts",
+    "test/routing-validator.test.ts",
+    "test/mcp-stdio.test.ts",
+    "test/cli.integration.test.ts"
+  ]
+}

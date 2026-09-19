@@ -1,0 +1,6 @@
+{
+  "recordingVersion": "1.0.0",
+  "caseId": "unknown-profile",
+  "inputId": "input-unknown",
+  "responseText": "{\"outcome\":\"selected\",\"delegationId\":\"delegation-unknown\",\"profileId\":\"missing-profile\",\"reasonCode\":\"recorded-choice\"}"
+}

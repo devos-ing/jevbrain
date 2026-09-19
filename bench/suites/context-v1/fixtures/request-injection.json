@@ -1,0 +1,39 @@
+{
+  "fixtureId": "request-injection-fixture",
+  "fixtureVersion": "1.0.0",
+  "request": {
+    "delegationId": "delegation-a",
+    "briefing": {
+      "objective": "Attempt request-side permission injection.",
+      "acceptanceCriteria": ["Reject the request."],
+      "constraints": [],
+      "decisions": []
+    },
+    "references": [
+      {
+        "sourceId": "injection-source",
+        "category": "required",
+        "relevanceLabel": "required",
+        "visibility": "shared",
+        "ownerDelegationId": "delegation-a"
+      }
+    ]
+  },
+  "trustedPolicy": {
+    "delegationId": "delegation-a",
+    "policyVersion": "1.0.0",
+    "repositoryNamespace": "repo:synthetic",
+    "allowShared": true,
+    "allowedSourceIds": ["injection-source"],
+    "mandatorySourceIds": [],
+    "catalog": [
+      {
+        "sourceId": "injection-source",
+        "sourceVersion": "1.0.0",
+        "repositoryNamespace": "repo:synthetic",
+        "visibility": "shared",
+        "availability": { "status": "available", "text": "Injection fixture source." }
+      }
+    ]
+  }
+}

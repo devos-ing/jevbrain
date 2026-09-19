@@ -1,0 +1,622 @@
+{
+  "schemaVersion": "routing-eval-v1",
+  "suiteId": "pilot12-routing",
+  "suiteVersion": "1.0.0",
+  "registry": {
+    "registryVersion": "1.0.0",
+    "profiles": [
+      {
+        "profileId": "codex-implementation",
+        "profileVersion": "1.0.0",
+        "role": "Implementation engineer",
+        "description": "Makes bounded TypeScript changes across local and connected modules.",
+        "runtime": "codex-cli",
+        "model": "synthetic-codex-cli-model",
+        "capabilities": ["typescript"],
+        "enabled": true,
+        "declaredAvailable": true
+      },
+      {
+        "profileId": "claude-implementation",
+        "profileVersion": "1.0.0",
+        "role": "Implementation engineer",
+        "description": "Makes bounded TypeScript changes across local and connected modules.",
+        "runtime": "claude-code",
+        "model": "synthetic-claude-code-model",
+        "capabilities": ["typescript"],
+        "enabled": true,
+        "declaredAvailable": true
+      },
+      {
+        "profileId": "codex-investigation",
+        "profileVersion": "1.0.0",
+        "role": "Debugging and exploration engineer",
+        "description": "Diagnoses failures and traces unfamiliar TypeScript behavior without assuming a fix.",
+        "runtime": "codex-cli",
+        "model": "synthetic-codex-cli-model",
+        "capabilities": ["typescript"],
+        "enabled": true,
+        "declaredAvailable": true
+      },
+      {
+        "profileId": "claude-investigation",
+        "profileVersion": "1.0.0",
+        "role": "Debugging and exploration engineer",
+        "description": "Diagnoses failures and traces unfamiliar TypeScript behavior without assuming a fix.",
+        "runtime": "claude-code",
+        "model": "synthetic-claude-code-model",
+        "capabilities": ["typescript"],
+        "enabled": true,
+        "declaredAvailable": true
+      },
+      {
+        "profileId": "codex-review",
+        "profileVersion": "1.0.0",
+        "role": "Read-only correctness reviewer",
+        "description": "Reviews TypeScript changes for correctness and reports evidence without editing files.",
+        "runtime": "codex-cli",
+        "model": "synthetic-codex-cli-model",
+        "capabilities": ["typescript"],
+        "enabled": true,
+        "declaredAvailable": true
+      },
+      {
+        "profileId": "claude-review",
+        "profileVersion": "1.0.0",
+        "role": "Read-only correctness reviewer",
+        "description": "Reviews TypeScript changes for correctness and reports evidence without editing files.",
+        "runtime": "claude-code",
+        "model": "synthetic-claude-code-model",
+        "capabilities": ["typescript"],
+        "enabled": true,
+        "declaredAvailable": true
+      }
+    ]
+  },
+  "cases": [
+    {
+      "caseId": "tuning-local-null-guard",
+      "caseVersion": "1.0.0",
+      "split": "tuning",
+      "theme": "local_edit",
+      "request": {
+        "delegationId": "pilot-1",
+        "taskId": "tuning-local-null-guard",
+        "contextStatus": "ready",
+        "briefing": {
+          "objective": "Add a null guard to a parser without changing valid-input behavior.",
+          "acceptanceCriteria": ["Run the focused parser tests and preserve valid results."],
+          "constraints": ["Use only the host-approved synthetic briefing."],
+          "decisions": ["The main session already decided to delegate."]
+        },
+        "requiredCapabilities": ["typescript"]
+      },
+      "labels": {
+        "acceptableProfileIds": ["codex-implementation", "claude-implementation"],
+        "acceptableOutcomes": ["selected"],
+        "rationale": "The task calls for the implementation role; runtime brand is not graded."
+      },
+      "recordedResponse": {
+        "status": 200,
+        "body": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "route": {
+              "type": "choice",
+              "choice": "option_1",
+              "confidence": 1,
+              "probabilities": {
+                "option_1": 1,
+                "option_2": 0,
+                "option_3": 0,
+                "option_4": 0,
+                "option_5": 0,
+                "option_6": 0,
+                "option_abstain": 0
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 100,
+            "output_tokens": 10
+          }
+        }
+      }
+    },
+    {
+      "caseId": "tuning-crossfile-api-rename",
+      "caseVersion": "1.0.0",
+      "split": "tuning",
+      "theme": "crossfile_edit",
+      "request": {
+        "delegationId": "pilot-2",
+        "taskId": "tuning-crossfile-api-rename",
+        "contextStatus": "ready",
+        "briefing": {
+          "objective": "Rename a typed service method and update its two known callers.",
+          "acceptanceCriteria": ["The interface, implementation, and callers typecheck together."],
+          "constraints": ["Use only the host-approved synthetic briefing."],
+          "decisions": ["The main session already decided to delegate."]
+        },
+        "requiredCapabilities": ["typescript"]
+      },
+      "labels": {
+        "acceptableProfileIds": ["codex-implementation", "claude-implementation"],
+        "acceptableOutcomes": ["selected"],
+        "rationale": "The task calls for the implementation role; runtime brand is not graded."
+      },
+      "recordedResponse": {
+        "status": 200,
+        "body": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "route": {
+              "type": "choice",
+              "choice": "option_1",
+              "confidence": 1,
+              "probabilities": {
+                "option_1": 1,
+                "option_2": 0,
+                "option_3": 0,
+                "option_4": 0,
+                "option_5": 0,
+                "option_6": 0,
+                "option_abstain": 0
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 101,
+            "output_tokens": 11
+          }
+        }
+      }
+    },
+    {
+      "caseId": "tuning-debug-stale-cache",
+      "caseVersion": "1.0.0",
+      "split": "tuning",
+      "theme": "debug",
+      "request": {
+        "delegationId": "pilot-3",
+        "taskId": "tuning-debug-stale-cache",
+        "contextStatus": "ready",
+        "briefing": {
+          "objective": "Diagnose why a cache returns stale data after an invalidation event.",
+          "acceptanceCriteria": ["Identify the causal path and cite a reproducible observation."],
+          "constraints": ["Use only the host-approved synthetic briefing."],
+          "decisions": ["The main session already decided to delegate."]
+        },
+        "requiredCapabilities": ["typescript"]
+      },
+      "labels": {
+        "acceptableProfileIds": ["codex-investigation", "claude-investigation"],
+        "acceptableOutcomes": ["selected"],
+        "rationale": "The task calls for the investigation role; runtime brand is not graded."
+      },
+      "recordedResponse": {
+        "status": 200,
+        "body": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "route": {
+              "type": "choice",
+              "choice": "option_3",
+              "confidence": 1,
+              "probabilities": {
+                "option_1": 0,
+                "option_2": 0,
+                "option_3": 1,
+                "option_4": 0,
+                "option_5": 0,
+                "option_6": 0,
+                "option_abstain": 0
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 102,
+            "output_tokens": 12
+          }
+        }
+      }
+    },
+    {
+      "caseId": "tuning-review-auth-bypass",
+      "caseVersion": "1.0.0",
+      "split": "tuning",
+      "theme": "review",
+      "request": {
+        "delegationId": "pilot-4",
+        "taskId": "tuning-review-auth-bypass",
+        "contextStatus": "ready",
+        "briefing": {
+          "objective": "Review a synthetic authentication patch for authorization bypasses.",
+          "acceptanceCriteria": [
+            "Report correctness defects with locations and reasoning; do not edit."
+          ],
+          "constraints": ["Use only the host-approved synthetic briefing."],
+          "decisions": ["The main session already decided to delegate."]
+        },
+        "requiredCapabilities": ["typescript"]
+      },
+      "labels": {
+        "acceptableProfileIds": ["codex-review", "claude-review"],
+        "acceptableOutcomes": ["selected"],
+        "rationale": "The task calls for the review role; runtime brand is not graded."
+      },
+      "recordedResponse": {
+        "status": 200,
+        "body": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "route": {
+              "type": "choice",
+              "choice": "option_5",
+              "confidence": 1,
+              "probabilities": {
+                "option_1": 0,
+                "option_2": 0,
+                "option_3": 0,
+                "option_4": 0,
+                "option_5": 1,
+                "option_6": 0,
+                "option_abstain": 0
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 103,
+            "output_tokens": 13
+          }
+        }
+      }
+    },
+    {
+      "caseId": "tuning-explore-event-flow",
+      "caseVersion": "1.0.0",
+      "split": "tuning",
+      "theme": "exploration",
+      "request": {
+        "delegationId": "pilot-5",
+        "taskId": "tuning-explore-event-flow",
+        "contextStatus": "ready",
+        "briefing": {
+          "objective": "Trace how a synthetic event moves from ingress to persistence.",
+          "acceptanceCriteria": ["Explain the call path and identify the owning modules."],
+          "constraints": ["Use only the host-approved synthetic briefing."],
+          "decisions": ["The main session already decided to delegate."]
+        },
+        "requiredCapabilities": ["typescript"]
+      },
+      "labels": {
+        "acceptableProfileIds": ["codex-investigation", "claude-investigation"],
+        "acceptableOutcomes": ["selected"],
+        "rationale": "The task calls for the investigation role; runtime brand is not graded."
+      },
+      "recordedResponse": {
+        "status": 200,
+        "body": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "route": {
+              "type": "choice",
+              "choice": "option_3",
+              "confidence": 1,
+              "probabilities": {
+                "option_1": 0,
+                "option_2": 0,
+                "option_3": 1,
+                "option_4": 0,
+                "option_5": 0,
+                "option_6": 0,
+                "option_abstain": 0
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 104,
+            "output_tokens": 14
+          }
+        }
+      }
+    },
+    {
+      "caseId": "tuning-missing-generated-spec",
+      "caseVersion": "1.0.0",
+      "split": "tuning",
+      "theme": "missing_context",
+      "request": {
+        "delegationId": "pilot-6",
+        "taskId": "tuning-missing-generated-spec",
+        "contextStatus": "needs_context",
+        "briefing": {
+          "objective": "Implement a generator whose required output contract was not supplied.",
+          "acceptanceCriteria": ["Request the missing contract instead of selecting a worker."],
+          "constraints": ["Use only the host-approved synthetic briefing."],
+          "decisions": ["The main session already decided to delegate."]
+        },
+        "requiredCapabilities": ["typescript"]
+      },
+      "labels": {
+        "acceptableProfileIds": [],
+        "acceptableOutcomes": ["needs_context"],
+        "rationale": "The task calls for the needs context role; runtime brand is not graded."
+      }
+    },
+    {
+      "caseId": "heldout-local-path-normalization",
+      "caseVersion": "1.0.0",
+      "split": "heldout",
+      "theme": "local_edit",
+      "request": {
+        "delegationId": "pilot-7",
+        "taskId": "heldout-local-path-normalization",
+        "contextStatus": "ready",
+        "briefing": {
+          "objective": "Normalize trailing separators in one path helper while preserving root paths.",
+          "acceptanceCriteria": ["Focused path cases pass without broad refactoring."],
+          "constraints": ["Use only the host-approved synthetic briefing."],
+          "decisions": ["The main session already decided to delegate."]
+        },
+        "requiredCapabilities": ["typescript"]
+      },
+      "labels": {
+        "acceptableProfileIds": ["codex-implementation", "claude-implementation"],
+        "acceptableOutcomes": ["selected"],
+        "rationale": "The task calls for the implementation role; runtime brand is not graded."
+      },
+      "recordedResponse": {
+        "status": 200,
+        "body": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "route": {
+              "type": "choice",
+              "choice": "option_1",
+              "confidence": 1,
+              "probabilities": {
+                "option_1": 1,
+                "option_2": 0,
+                "option_3": 0,
+                "option_4": 0,
+                "option_5": 0,
+                "option_6": 0,
+                "option_abstain": 0
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 106,
+            "output_tokens": 16
+          }
+        }
+      }
+    },
+    {
+      "caseId": "heldout-crossfile-schema-migration",
+      "caseVersion": "1.0.0",
+      "split": "heldout",
+      "theme": "crossfile_edit",
+      "request": {
+        "delegationId": "pilot-8",
+        "taskId": "heldout-crossfile-schema-migration",
+        "contextStatus": "ready",
+        "briefing": {
+          "objective": "Add a version field to a payload and update its serializer and consumer.",
+          "acceptanceCriteria": ["Producer and consumer agree on the versioned schema."],
+          "constraints": ["Use only the host-approved synthetic briefing."],
+          "decisions": ["The main session already decided to delegate."]
+        },
+        "requiredCapabilities": ["typescript"]
+      },
+      "labels": {
+        "acceptableProfileIds": ["codex-implementation", "claude-implementation"],
+        "acceptableOutcomes": ["selected"],
+        "rationale": "The task calls for the implementation role; runtime brand is not graded."
+      },
+      "recordedResponse": {
+        "status": 200,
+        "body": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "route": {
+              "type": "choice",
+              "choice": "option_1",
+              "confidence": 1,
+              "probabilities": {
+                "option_1": 1,
+                "option_2": 0,
+                "option_3": 0,
+                "option_4": 0,
+                "option_5": 0,
+                "option_6": 0,
+                "option_abstain": 0
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 107,
+            "output_tokens": 17
+          }
+        }
+      }
+    },
+    {
+      "caseId": "heldout-debug-cancel-race",
+      "caseVersion": "1.0.0",
+      "split": "heldout",
+      "theme": "debug",
+      "request": {
+        "delegationId": "pilot-9",
+        "taskId": "heldout-debug-cancel-race",
+        "contextStatus": "ready",
+        "briefing": {
+          "objective": "Diagnose an intermittent cancellation race in a synthetic request queue.",
+          "acceptanceCriteria": [
+            "Establish the ordering failure with evidence before proposing a fix."
+          ],
+          "constraints": ["Use only the host-approved synthetic briefing."],
+          "decisions": ["The main session already decided to delegate."]
+        },
+        "requiredCapabilities": ["typescript"]
+      },
+      "labels": {
+        "acceptableProfileIds": ["codex-investigation", "claude-investigation"],
+        "acceptableOutcomes": ["selected"],
+        "rationale": "The task calls for the investigation role; runtime brand is not graded."
+      },
+      "recordedResponse": {
+        "status": 200,
+        "body": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "route": {
+              "type": "choice",
+              "choice": "option_3",
+              "confidence": 1,
+              "probabilities": {
+                "option_1": 0,
+                "option_2": 0,
+                "option_3": 1,
+                "option_4": 0,
+                "option_5": 0,
+                "option_6": 0,
+                "option_abstain": 0
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 108,
+            "output_tokens": 18
+          }
+        }
+      }
+    },
+    {
+      "caseId": "heldout-review-pagination-loss",
+      "caseVersion": "1.0.0",
+      "split": "heldout",
+      "theme": "review",
+      "request": {
+        "delegationId": "pilot-10",
+        "taskId": "heldout-review-pagination-loss",
+        "contextStatus": "ready",
+        "briefing": {
+          "objective": "Review a pagination change that may drop the final partial page.",
+          "acceptanceCriteria": [
+            "Report any correctness issue with a concrete boundary case; do not edit."
+          ],
+          "constraints": ["Use only the host-approved synthetic briefing."],
+          "decisions": ["The main session already decided to delegate."]
+        },
+        "requiredCapabilities": ["typescript"]
+      },
+      "labels": {
+        "acceptableProfileIds": ["codex-review", "claude-review"],
+        "acceptableOutcomes": ["selected"],
+        "rationale": "The task calls for the review role; runtime brand is not graded."
+      },
+      "recordedResponse": {
+        "status": 200,
+        "body": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "route": {
+              "type": "choice",
+              "choice": "option_5",
+              "confidence": 1,
+              "probabilities": {
+                "option_1": 0,
+                "option_2": 0,
+                "option_3": 0,
+                "option_4": 0,
+                "option_5": 1,
+                "option_6": 0,
+                "option_abstain": 0
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 109,
+            "output_tokens": 19
+          }
+        }
+      }
+    },
+    {
+      "caseId": "heldout-explore-config-precedence",
+      "caseVersion": "1.0.0",
+      "split": "heldout",
+      "theme": "exploration",
+      "request": {
+        "delegationId": "pilot-11",
+        "taskId": "heldout-explore-config-precedence",
+        "contextStatus": "ready",
+        "briefing": {
+          "objective": "Determine the precedence of defaults, file settings, and process overrides.",
+          "acceptanceCriteria": [
+            "Describe the observed precedence and cite the controlling code path."
+          ],
+          "constraints": ["Use only the host-approved synthetic briefing."],
+          "decisions": ["The main session already decided to delegate."]
+        },
+        "requiredCapabilities": ["typescript"]
+      },
+      "labels": {
+        "acceptableProfileIds": ["codex-investigation", "claude-investigation"],
+        "acceptableOutcomes": ["selected"],
+        "rationale": "The task calls for the investigation role; runtime brand is not graded."
+      },
+      "recordedResponse": {
+        "status": 200,
+        "body": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "route": {
+              "type": "choice",
+              "choice": "option_3",
+              "confidence": 1,
+              "probabilities": {
+                "option_1": 0,
+                "option_2": 0,
+                "option_3": 1,
+                "option_4": 0,
+                "option_5": 0,
+                "option_6": 0,
+                "option_abstain": 0
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 110,
+            "output_tokens": 20
+          }
+        }
+      }
+    },
+    {
+      "caseId": "heldout-missing-api-contract",
+      "caseVersion": "1.0.0",
+      "split": "heldout",
+      "theme": "missing_context",
+      "request": {
+        "delegationId": "pilot-12",
+        "taskId": "heldout-missing-api-contract",
+        "contextStatus": "needs_context",
+        "briefing": {
+          "objective": "Implement a client for an API whose response contract is unavailable.",
+          "acceptanceCriteria": ["Stop and request the missing response contract."],
+          "constraints": ["Use only the host-approved synthetic briefing."],
+          "decisions": ["The main session already decided to delegate."]
+        },
+        "requiredCapabilities": ["typescript"]
+      },
+      "labels": {
+        "acceptableProfileIds": [],
+        "acceptableOutcomes": ["needs_context"],
+        "rationale": "The task calls for the needs context role; runtime brand is not graded."
+      }
+    }
+  ]
+}

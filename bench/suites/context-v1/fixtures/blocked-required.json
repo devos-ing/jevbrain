@@ -1,0 +1,44 @@
+{
+  "fixtureId": "blocked-required-fixture",
+  "fixtureVersion": "1.0.0",
+  "request": {
+    "delegationId": "delegation-a",
+    "briefing": {
+      "objective": "Exercise blocked required context.",
+      "acceptanceCriteria": ["Return needs_context."],
+      "constraints": [],
+      "decisions": []
+    },
+    "references": [
+      {
+        "sourceId": "forbidden-required-canary",
+        "category": "required",
+        "relevanceLabel": "required"
+      }
+    ]
+  },
+  "trustedPolicy": {
+    "delegationId": "delegation-a",
+    "policyVersion": "1.0.0",
+    "repositoryNamespace": "repo:synthetic",
+    "allowShared": true,
+    "allowedSourceIds": ["forbidden-required-canary", "pending-mandatory-canary"],
+    "mandatorySourceIds": ["pending-mandatory-canary"],
+    "catalog": [
+      {
+        "sourceId": "forbidden-required-canary",
+        "sourceVersion": "1.0.0",
+        "repositoryNamespace": "repo:synthetic",
+        "visibility": "forbidden",
+        "availability": { "status": "available", "text": "BLOCKED_REQUIRED_CANARY_TEXT" }
+      },
+      {
+        "sourceId": "pending-mandatory-canary",
+        "sourceVersion": "1.0.0",
+        "repositoryNamespace": "repo:synthetic",
+        "visibility": "shared",
+        "availability": { "status": "pending" }
+      }
+    ]
+  }
+}

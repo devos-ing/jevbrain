@@ -1,0 +1,171 @@
+{
+  "schemaVersion": "m0.1",
+  "suiteId": "contracts-v1-synthetic",
+  "suiteVersion": "1.0.0",
+  "verifierVersion": "contracts-v1",
+  "cases": [
+    {
+      "caseId": "valid-select",
+      "caseVersion": "1.0.0",
+      "input": {
+        "inputId": "input-select",
+        "delegationId": "delegation-select",
+        "task": {
+          "taskId": "task-select",
+          "objective": "Select an eligible implementation profile",
+          "requiredCapabilities": ["implementation"]
+        },
+        "suppliedContext": [],
+        "candidateProfileIds": ["codex-impl"]
+      },
+      "profiles": [
+        {
+          "profileId": "codex-impl",
+          "runtime": "codex-cli",
+          "modelId": "synthetic-model",
+          "enabled": true,
+          "capabilities": ["implementation"]
+        }
+      ],
+      "recordingFile": "recordings/valid-select.json",
+      "expected": { "status": "accepted", "outcome": "selected" }
+    },
+    {
+      "caseId": "valid-abstain",
+      "caseVersion": "1.0.0",
+      "input": {
+        "inputId": "input-abstain",
+        "delegationId": "delegation-abstain",
+        "task": {
+          "taskId": "task-abstain",
+          "objective": "Abstain when the recording says evidence is insufficient",
+          "requiredCapabilities": ["review"]
+        },
+        "suppliedContext": [],
+        "candidateProfileIds": ["codex-review"]
+      },
+      "profiles": [
+        {
+          "profileId": "codex-review",
+          "runtime": "codex-cli",
+          "modelId": "synthetic-model",
+          "enabled": true,
+          "capabilities": ["review"]
+        }
+      ],
+      "recordingFile": "recordings/valid-abstain.json",
+      "expected": { "status": "accepted", "outcome": "abstained" }
+    },
+    {
+      "caseId": "malformed-json",
+      "caseVersion": "1.0.0",
+      "input": {
+        "inputId": "input-malformed",
+        "delegationId": "delegation-malformed",
+        "task": {
+          "taskId": "task-malformed",
+          "objective": "Reject malformed response text",
+          "requiredCapabilities": []
+        },
+        "suppliedContext": [],
+        "candidateProfileIds": ["codex-impl"]
+      },
+      "profiles": [
+        {
+          "profileId": "codex-impl",
+          "runtime": "codex-cli",
+          "modelId": "synthetic-model",
+          "enabled": true,
+          "capabilities": ["implementation"]
+        }
+      ],
+      "recordingFile": "recordings/malformed-json.json",
+      "expected": { "status": "rejected", "reason": "malformed_response" }
+    },
+    {
+      "caseId": "delegation-mismatch",
+      "caseVersion": "1.0.0",
+      "input": {
+        "inputId": "input-delegation",
+        "delegationId": "delegation-expected",
+        "task": {
+          "taskId": "task-delegation",
+          "objective": "Reject a response for another delegation",
+          "requiredCapabilities": []
+        },
+        "suppliedContext": [],
+        "candidateProfileIds": ["codex-impl"]
+      },
+      "profiles": [
+        {
+          "profileId": "codex-impl",
+          "runtime": "codex-cli",
+          "modelId": "synthetic-model",
+          "enabled": true,
+          "capabilities": ["implementation"]
+        }
+      ],
+      "recordingFile": "recordings/delegation-mismatch.json",
+      "expected": { "status": "rejected", "reason": "delegation_mismatch" }
+    },
+    {
+      "caseId": "unknown-profile",
+      "caseVersion": "1.0.0",
+      "input": {
+        "inputId": "input-unknown",
+        "delegationId": "delegation-unknown",
+        "task": {
+          "taskId": "task-unknown",
+          "objective": "Reject an unregistered profile",
+          "requiredCapabilities": []
+        },
+        "suppliedContext": [],
+        "candidateProfileIds": ["missing-profile"]
+      },
+      "profiles": [
+        {
+          "profileId": "codex-impl",
+          "runtime": "codex-cli",
+          "modelId": "synthetic-model",
+          "enabled": true,
+          "capabilities": ["implementation"]
+        }
+      ],
+      "recordingFile": "recordings/unknown-profile.json",
+      "expected": { "status": "rejected", "reason": "unknown_profile" }
+    },
+    {
+      "caseId": "unsupplied-profile",
+      "caseVersion": "1.0.0",
+      "input": {
+        "inputId": "input-unsupplied",
+        "delegationId": "delegation-unsupplied",
+        "task": {
+          "taskId": "task-unsupplied",
+          "objective": "Reject a registered profile outside supplied candidates",
+          "requiredCapabilities": []
+        },
+        "suppliedContext": [],
+        "candidateProfileIds": ["codex-review"]
+      },
+      "profiles": [
+        {
+          "profileId": "codex-review",
+          "runtime": "codex-cli",
+          "modelId": "synthetic-model",
+          "enabled": true,
+          "capabilities": ["review"]
+        },
+        {
+          "profileId": "codex-impl",
+          "runtime": "codex-cli",
+          "modelId": "synthetic-model",
+          "enabled": true,
+          "capabilities": ["implementation"]
+        }
+      ],
+      "recordingFile": "recordings/unsupplied-profile.json",
+      "expected": { "status": "rejected", "reason": "profile_not_supplied" }
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "recordingVersion": "1.0.0",
+  "caseId": "valid-abstain",
+  "inputId": "input-abstain",
+  "responseText": "{\"outcome\":\"abstained\",\"delegationId\":\"delegation-abstain\",\"reasonCode\":\"insufficient-evidence\"}"
+}

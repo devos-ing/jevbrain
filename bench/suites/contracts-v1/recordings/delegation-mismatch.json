@@ -1,0 +1,6 @@
+{
+  "recordingVersion": "1.0.0",
+  "caseId": "delegation-mismatch",
+  "inputId": "input-delegation",
+  "responseText": "{\"outcome\":\"abstained\",\"delegationId\":\"another-delegation\",\"reasonCode\":\"insufficient-evidence\"}"
+}

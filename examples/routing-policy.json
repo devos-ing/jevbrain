@@ -1,0 +1,10 @@
+{
+  "policyVersion": "1.0.0",
+  "allowedProfileIds": ["replace-with-real-profile"],
+  "providerEnabled": false,
+  "egressEnabled": false,
+  "confidenceThreshold": 0.7,
+  "deadlineMs": 1800000,
+  "maxRequestBytes": 16384,
+  "maxResponseBytes": 65536
+}

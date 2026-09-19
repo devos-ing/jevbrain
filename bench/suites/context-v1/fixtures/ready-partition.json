@@ -1,0 +1,84 @@
+{
+  "fixtureId": "ready-partition-fixture",
+  "fixtureVersion": "1.0.0",
+  "request": {
+    "delegationId": "delegation-a",
+    "briefing": {
+      "objective": "Implement the synthetic task exactly.",
+      "acceptanceCriteria": ["Preserve all admitted text."],
+      "constraints": ["Do not infer missing evidence."],
+      "decisions": ["Use the supplied contract."]
+    },
+    "references": [
+      { "sourceId": "optional-source", "category": "optional", "relevanceLabel": "example" },
+      { "sourceId": "required-source", "category": "required", "relevanceLabel": "constraint" },
+      { "sourceId": "shared-source", "category": "shared", "relevanceLabel": "project rule" },
+      { "sourceId": "evidence-source", "category": "evidence", "relevanceLabel": "test output" },
+      {
+        "sourceId": "private-canary-id",
+        "category": "optional",
+        "relevanceLabel": "must stay private"
+      }
+    ]
+  },
+  "trustedPolicy": {
+    "delegationId": "delegation-a",
+    "policyVersion": "1.0.0",
+    "repositoryNamespace": "repo:synthetic",
+    "allowShared": true,
+    "allowedSourceIds": [
+      "required-source",
+      "shared-source",
+      "evidence-source",
+      "optional-source",
+      "mandatory-source"
+    ],
+    "mandatorySourceIds": ["mandatory-source"],
+    "catalog": [
+      {
+        "sourceId": "required-source",
+        "sourceVersion": "1.0.0",
+        "repositoryNamespace": "repo:synthetic",
+        "visibility": "delegation_private",
+        "ownerDelegationId": "delegation-a",
+        "availability": { "status": "available", "text": "Required source text." }
+      },
+      {
+        "sourceId": "shared-source",
+        "sourceVersion": "1.0.0",
+        "repositoryNamespace": "repo:synthetic",
+        "visibility": "shared",
+        "availability": { "status": "available", "text": "Shared source text." }
+      },
+      {
+        "sourceId": "evidence-source",
+        "sourceVersion": "1.0.0",
+        "repositoryNamespace": "repo:synthetic",
+        "visibility": "delegation_private",
+        "ownerDelegationId": "delegation-a",
+        "availability": { "status": "available", "text": "Evidence source text." }
+      },
+      {
+        "sourceId": "optional-source",
+        "sourceVersion": "1.0.0",
+        "repositoryNamespace": "repo:synthetic",
+        "visibility": "shared",
+        "availability": { "status": "available", "text": "Optional source text." }
+      },
+      {
+        "sourceId": "mandatory-source",
+        "sourceVersion": "1.0.0",
+        "repositoryNamespace": "repo:synthetic",
+        "visibility": "shared",
+        "availability": { "status": "available", "text": "Mandatory source text." }
+      },
+      {
+        "sourceId": "private-canary-id",
+        "sourceVersion": "1.0.0",
+        "repositoryNamespace": "repo:synthetic",
+        "visibility": "forbidden",
+        "availability": { "status": "available", "text": "PRIVATE_BENCHMARK_CANARY_TEXT" }
+      }
+    ]
+  }
+}

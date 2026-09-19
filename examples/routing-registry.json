@@ -1,0 +1,16 @@
+{
+  "registryVersion": "1.0.0",
+  "profiles": [
+    {
+      "profileId": "replace-with-real-profile",
+      "profileVersion": "1.0.0",
+      "role": "Replace with a host-owned role",
+      "description": "Replace this synthetic descriptor before enabling routing.",
+      "runtime": "codex-cli",
+      "model": "replace-with-configured-model",
+      "capabilities": ["replace-with-real-capability"],
+      "enabled": false,
+      "declaredAvailable": false
+    }
+  ]
+}

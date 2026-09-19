@@ -1,0 +1,12 @@
+{
+  "delegationId": "replace-with-delegation-id",
+  "taskId": "replace-with-task-id",
+  "contextStatus": "ready",
+  "briefing": {
+    "objective": "Replace with a bounded, host-approved subtask objective.",
+    "acceptanceCriteria": ["Replace with concrete acceptance criteria."],
+    "constraints": ["Do not include raw source catalogs or unrelated conversation text."],
+    "decisions": []
+  },
+  "requiredCapabilities": ["replace-with-real-capability"]
+}

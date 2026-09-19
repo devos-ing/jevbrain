@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "context-bench-v1",
+  "suiteId": "context-v1-synthetic",
+  "suiteVersion": "1.0.0",
+  "splitterVersion": "context-v1",
+  "verifierVersion": "context-checks-v1",
+  "cases": [
+    {
+      "caseId": "ready-partition",
+      "caseVersion": "1.0.0",
+      "fixtureFile": "fixtures/ready-partition.json",
+      "expected": {
+        "status": "ready",
+        "delegationId": "delegation-a",
+        "policyVersion": "1.0.0",
+        "repositoryNamespace": "repo:synthetic",
+        "briefingDigest": "sha256:c36cf9287a0509e4144c8975a8368df8f72d52349492578e89e54cc40ce79542",
+        "admittedSources": [
+          {
+            "sourceId": "evidence-source",
+            "category": "evidence",
+            "contentDigest": "sha256:4d8db4fa709d80986481361fd5f41265cddfac3a038870702101c0996109ea1c"
+          },
+          {
+            "sourceId": "mandatory-source",
+            "category": "required",
+            "contentDigest": "sha256:abcc5cadb926fd8c2384ea0aca616345e748cc85b1f94dd32d9506a60cbd4735"
+          },
+          {
+            "sourceId": "optional-source",
+            "category": "optional",
+            "contentDigest": "sha256:6a9fb927bd28940b616aeef9471d2040399ab5d875e56820c9389f1bb7b776ff"
+          },
+          {
+            "sourceId": "required-source",
+            "category": "required",
+            "contentDigest": "sha256:f558f32d893d8212767bd92833f365350034cb01f901ca9375d09567ae1e14f9"
+          },
+          {
+            "sourceId": "shared-source",
+            "category": "shared",
+            "contentDigest": "sha256:c0ff6f9e42842f4936ade8129e02578f8981cf094319f8af748169be32f2939f"
+          }
+        ],
+        "deniedCount": 1,
+        "unavailableCount": 0
+      }
+    },
+    {
+      "caseId": "blocked-required",
+      "caseVersion": "1.0.0",
+      "fixtureFile": "fixtures/blocked-required.json",
+      "expected": { "status": "needs_context", "missingRequiredCount": 2 }
+    },
+    {
+      "caseId": "request-injection",
+      "caseVersion": "1.0.0",
+      "fixtureFile": "fixtures/request-injection.json",
+      "expected": { "status": "rejected", "reason": "invalid_request" }
+    }
+  ]
+}

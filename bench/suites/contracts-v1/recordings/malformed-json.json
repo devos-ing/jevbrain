@@ -1,0 +1,6 @@
+{
+  "recordingVersion": "1.0.0",
+  "caseId": "malformed-json",
+  "inputId": "input-malformed",
+  "responseText": "{not-json"
+}

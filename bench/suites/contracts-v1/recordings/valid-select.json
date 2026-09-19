@@ -1,0 +1,6 @@
+{
+  "recordingVersion": "1.0.0",
+  "caseId": "valid-select",
+  "inputId": "input-select",
+  "responseText": "{\"outcome\":\"selected\",\"delegationId\":\"delegation-select\",\"profileId\":\"codex-impl\",\"reasonCode\":\"capability-match\"}"
+}

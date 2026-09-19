@@ -1,0 +1,16 @@
+{
+  "delegationId": "delegation-cli",
+  "briefing": {
+    "objective": "Demonstrate deterministic context splitting.",
+    "acceptanceCriteria": ["Return the admitted source verbatim."],
+    "constraints": ["Use only the trusted policy catalog."],
+    "decisions": []
+  },
+  "references": [
+    {
+      "sourceId": "cli-shared-source",
+      "category": "shared",
+      "relevanceLabel": "CLI example"
+    }
+  ]
+}

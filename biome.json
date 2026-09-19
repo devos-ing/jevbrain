@@ -1,0 +1,27 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.14/schema.json",
+  "files": {
+    "includes": [
+      "**",
+      "!!node_modules",
+      "!!.git",
+      "!!.getsuperpower",
+      "!!artifacts",
+      "!!demos",
+      "!!src/study",
+      "!!bench/site-build-v1",
+      "!!bench/poker-trainer-v1",
+      "!!bench/game2048-v1",
+      "!!bench/game2048-repair-v1",
+      "!!bench/game2048-report",
+      "!!test/study*.test.ts",
+      "!!docs/**/*.html",
+      "!!docs/**/*.json"
+    ]
+  },
+  "formatter": { "enabled": true, "indentStyle": "space", "lineWidth": 100 },
+  "linter": {
+    "enabled": true,
+    "rules": { "preset": "recommended", "suspicious": { "noExplicitAny": "error" } }
+  }
+}
