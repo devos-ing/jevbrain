@@ -1,81 +1,60 @@
 # jevbrain
 
-Jevbrain adds profile selection to an existing sub-agent workflow. Your main session decides when to delegate and sends a bounded task brief to `task_route`. Jevbrain removes ineligible profiles, asks Jev to select from the remaining registered profiles, validates the response, and returns a profile ID. The host then launches that profile through its own runtime and returns the result to the same main session.
+Jevbrain selects a registered profile with a role, model, effort, and capability set. The main session decides when to delegate, Jev selects an eligible profile, and the host executes and verifies the work.
 
-```text
-main session decides to delegate
-  → task_route checks the trusted registry and policy
-  → Jev selects an eligible profile or abstains
-  → host launches the selected profile
-  → result returns to the main session for verification
-```
+![Offline routing replay](docs/assets/routing-replay.gif)
 
-Jevbrain makes the routing decision explicit and replayable. It does not decide whether to delegate, execute workers, raise permissions, or replace the host's verification step.
+This short replay uses curated illustrative data. It shows the routing contract only. It does not call Jev or launch a worker.
 
-## Quick start
+## Install from source
 
-Install [Bun](https://bun.sh/) 1.3.8 or newer, then install the locked dependencies:
+Requirements: Bun 1.3.8 or newer and a Codex CLI build with plugin support.
 
 ```bash
+git clone https://github.com/devos-ing/jevbrain.git
+cd jevbrain
 bun install --frozen-lockfile
-```
-
-The server requires a host-owned registry and policy:
-
-```bash
-bun bin/jevbrain.mjs server \
-  --registry examples/routing-registry.json \
-  --policy examples/routing-policy.json
-```
-
-The checked-in registry is a nine-profile template covering general, frontend, backend, debugging, review, and documentation work at fixed medium or high effort. Every profile is marked unavailable until the host confirms that its runtime exists. Replace or adapt the profile metadata and availability with values that your host controls. Provider access and egress remain off until the trusted policy enables them. Keep credentials in the server environment, never in the registry, policy, or MCP config.
-
-`task_route_options` lists profiles that policy allows and the host marks enabled and available. It makes no provider call and returns profile metadata, including optional effort. Required-capability matching still happens in `task_route` for the specific delegation.
-
-Use the [Codex MCP example](examples/codex-mcp.toml) or [Claude Code MCP example](examples/claude-code-mcp.json) as a starting point. Both contain path placeholders and do not activate either host by themselves.
-
-## Install the Codex plugin
-
-From this source checkout, stage the self-contained local plugin and install it from the personal marketplace:
-
-```bash
 bun run plugin:stage
 codex plugin add jevbrain@personal
 ```
 
-The staged plugin keeps provider access off and lists no available routing options until you supply host-owned configuration. Read [Install the Jevbrain Codex plugin](docs/codex-plugin.md) for paths, updates, isolated validation, and the local-stdio distribution limit.
+Start a new Codex task after installation so the MCP tool and companion skill load.
 
-## Replay the router offline
+The staged plugin uses disabled defaults. The bundled profiles are enabled in the registry but all have `declaredAvailable: false`. The policy keeps provider access and egress disabled. A new installation therefore returns no profiles from `task_route_options` and makes no Jev call.
 
-Run the production routing core against recorded provider observations:
+### Configure availability
+
+Keep host-owned configuration outside the staged plugin. Copy the example files, then set the profiles that your host can actually launch to `declaredAvailable: true`.
 
 ```bash
-bun run bench routing-replay \
-  --suite bench/routing-v1/suite.json \
-  --out /tmp/jevbrain-routing-replay
+mkdir -p ~/.config/jevbrain
+cp -n examples/routing-registry.json ~/.config/jevbrain/registry.json
+cp -n examples/routing-policy.json ~/.config/jevbrain/policy.json
+export JEVBRAIN_REGISTRY="$HOME/.config/jevbrain/registry.json"
+export JEVBRAIN_POLICY="$HOME/.config/jevbrain/policy.json"
 ```
 
-The replay makes no provider request and launches no worker. It checks eligibility, request serialization, response validation, abstention, and immutable run output.
+Set `providerEnabled` and `egressEnabled` to `true` only when you intend to send routing briefs to Jev. Supply `TYPESAFE_API_KEY` through the process environment. For the CLI, launch `codex` from the configured shell. A desktop app must inherit these variables when it starts; restarting an already running app does not add them. See the [plugin installation guide](docs/codex-plugin.md) for details. Never put credentials in the registry, policy, or MCP configuration. Availability tells Jevbrain what the host can launch; it does not launch or grant access to that runtime.
 
-For a visual explanation, open the [12-second routing replay](demos/routing-replay/README.md). It uses curated illustrative data and clearly separates Jev's selection from host-owned execution.
+See [the plugin installation guide](docs/codex-plugin.md) for staged paths and updates. If you want a standalone MCP connection, use [the Codex example](examples/codex-mcp.toml) or [the Claude Code example](examples/claude-code-mcp.json). Both contain path placeholders.
 
-## What the host must own
+## Usage
 
-- Decide whether a task should be delegated.
-- Build the approved brief and candidate profile set.
-- Supply the trusted registry, policy, permissions, and runtime availability.
-- Launch the returned profile through an existing runtime.
-- Verify and integrate the result in the original main session.
+Call `task_route_options` first. It takes an empty object and returns enabled, available, policy-allowed profile metadata without contacting Jev.
 
-Candidate IDs in a request can only narrow the trusted registry. They cannot add profiles, commands, tools, data access, or permissions. If context is missing, no profile is eligible, the provider is disabled, or Jev abstains, `task_route` returns an explicit non-selection result.
+Then call `task_route` with the approved delegation brief. Use [the routing request example](examples/routing-request.json) as the request shape.
 
-## Current limits
+For example, ask Codex:
 
-The released routing core selects profiles only. Native Codex or Claude host activation, general worker execution, runtime permission enforcement, follow-up reads, repository retrieval, and context compression are not part of the released router. Existing synthetic live checks validate the bounded Jev transport and routing labels; they do not establish worker quality, accuracy calibration, speed, or savings.
+```text
+List the available profiles, then route this frontend fix to an eligible profile. Preserve an abstention if no profile qualifies. Return the selected role, model, and effort.
+```
 
-Read the [routing contract](docs/routing-first.md), [context handoff rules](docs/context-handoff.md), [offline benchmark guide](docs/benchmark.md), and [roadmap](PLAN.md) for details.
+`candidateProfileIds` can narrow the trusted registry. It cannot add a profile, command, tool, data source, or permission. If context is incomplete, no eligible profile remains, provider access is disabled, or Jev abstains, the router returns an explicit non-selection result.
 
 ## Development
+
+Run the focused project checks with Bun:
 
 ```bash
 bun run typecheck
@@ -83,4 +62,27 @@ bun run lint
 bun run test
 ```
 
-The demo's visual rhythm is inspired by [Tamara Tran's JevDemo on X](https://x.com/tamarajtran/status/2100694549362553153) and the MIT-licensed [fast-jev-compaction demo on GitHub](https://github.com/tamaratran/fast-jev-compaction/tree/main/demo/JevDemo).
+To run the visual demo locally:
+
+```bash
+cd demos/routing-replay
+bun install --frozen-lockfile
+bun run build
+bun run preview
+```
+
+Open `http://127.0.0.1:4430`.
+
+From the repository root, replay recorded routing observations without a provider request or worker launch:
+
+```bash
+bun run bench routing-replay \
+  --suite bench/routing-v1/suite.json \
+  --out /tmp/jevbrain-routing-replay
+```
+
+See [the routing replay demo](demos/routing-replay/README.md) for the browser version.
+
+Read [the routing contract](docs/routing-first.md) for eligibility and result states, [the context handoff rules](docs/context-handoff.md) for source manifests and grants, and [the benchmark guide](docs/benchmark.md) for offline evaluation details.
+
+The demo's visual rhythm is inspired by [Tamara Tran's JevDemo on X](https://x.com/tamarajtran/status/2100694549362553153) and the MIT-licensed [fast-jev-compaction demo](https://github.com/tamaratran/fast-jev-compaction/tree/main/demo/JevDemo).
